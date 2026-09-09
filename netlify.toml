@@ -1,0 +1,18 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  # 说明：若把整个工作区作为 git 仓库部署，
+  # 则在 Netlify 站点设置中令 Base directory = rain-gauge-web，
+  # 此时 publish 仍为 dist（相对 base 目录解析）。
+
+# JS / CSS 自带 hash，可长期缓存；GLB 通过文件名版本控制失效。
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/models/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "model/gltf-binary"

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="description" content="双翻斗雨量传感器 3D 科普展品：旋转观察、播放工作原理动画，看降水如何变成数字。" />
+  <meta name="theme-color" content="#f1f3f5" />
+  <title>双翻斗雨量传感器 · 3D 科普展品</title>
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1>双翻斗雨量传感器</h1>
+      <p class="subtitle">降水如何变成数字？</p>
+    </header>
+
+    <main>
+      <!-- 3D 展示区 -->
+      <section id="viewer-wrap" aria-label="3D 模型展示区">
+        <div id="viewer"></div>
+
+        <div id="loading" role="status" aria-live="polite">
+          <div class="loading-box">
+            <p>模型加载中 <span id="loading-text">0%</span></p>
+            <div class="loading-track"><div id="loading-bar"></div></div>
+          </div>
+        </div>
+
+        <div id="load-error" hidden>
+          <p>3D 模型加载失败，请刷新页面重试。</p>
+        </div>
+
+        <div id="hint" hidden>拖动旋转 · 双指缩放 · 点击零件看说明</div>
+        <div id="pulse-dot" aria-hidden="true"></div>
+
+        <!-- 零件说明卡片 -->
+        <div id="card" hidden>
+          <div class="card-body">
+            <h2 id="card-title">部件</h2>
+            <p id="card-desc">说明</p>
+          </div>
+          <div class="card-actions">
+            <button id="card-focus" type="button">定位查看</button>
+            <button id="card-close" type="button" aria-label="关闭说明">关闭</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 实时读数 -->
+      <section class="stats" aria-live="polite">
+        <div class="stat stat-rain">
+          <span class="stat-label">累计雨量</span>
+          <span class="stat-value"><span id="rain-value">0.0</span><span class="unit"> mm</span></span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">脉冲次数</span>
+          <span class="stat-value"><span id="pulse-value">0</span><span class="unit"> 次</span></span>
+        </div>
+        <div class="stat stat-stage">
+          <span class="stat-label">当前阶段</span>
+          <span id="stage-label" class="stage-label">待开始</span>
+        </div>
+      </section>
+      <p id="stage-desc" class="stage-desc">点击「开始演示」，观看降水变成数字的全过程。</p>
+
+      <!-- 六阶段 -->
+      <ol id="steps" class="steps" aria-label="工作原理六个阶段"></ol>
+
+      <!-- 播放进度 -->
+      <div class="progress-row">
+        <div class="progress-track"><div id="progress-fill"></div></div>
+        <span id="time-text">0.0s / 30.0s</span>
+      </div>
+
+      <!-- 控制按钮 -->
+      <section class="controls" aria-label="演示控制">
+        <button id="btn-play" type="button" class="btn primary" disabled>开始演示</button>
+        <button id="btn-reset" type="button" class="btn" disabled>重新开始</button>
+        <button id="btn-slow" type="button" class="btn toggle" aria-pressed="false" disabled>慢动作</button>
+        <button id="btn-shell" type="button" class="btn toggle" aria-pressed="false" disabled>查看内部</button>
+        <button id="btn-rotate" type="button" class="btn toggle on" aria-pressed="true">自动旋转</button>
+        <button id="btn-cam" type="button" class="btn" disabled>恢复视角</button>
+      </section>
+
+      <!-- 原理链（默认折叠，避免文字淹没模型） -->
+      <details class="principle">
+        <summary>工作原理：降水 → 脉冲 → 雨量</summary>
+        <p class="chain">降水 → 承水器 → 漏斗 → 上翻斗 → 汇集漏斗 → 节流管 → 计量翻斗 → 计数翻斗 → 磁钢 → 干簧管 → 电脉冲 → 累计雨量</p>
+        <p class="rule">计数规则：<strong>1 次有效电脉冲 = 0.1 mm</strong>，累计雨量 = 脉冲次数 × 0.1。本次演示共 5 次脉冲，累计 0.5 mm。</p>
+      </details>
+
+      <details id="debug-panel" class="debug" hidden>
+        <summary>调试信息</summary>
+        <pre id="debug-info">—</pre>
+      </details>
+    </main>
+
+    <footer class="footer">
+      <p>双翻斗雨量传感器 · 数字科普展品（0.1 mm / 脉冲）</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
